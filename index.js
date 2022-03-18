@@ -15,12 +15,12 @@ displayList(artList)
 pressEnter()
 
 function pressEnter () {
-  const r1 = readline.createInterface({
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   })
-  r1.question('Pick an artwork by inputting a number between 0 and 4 and press Enter:    ', function (input) {
-    r1.close()
+  rl.question('Pick an artwork by inputting a number between 0 and 4 and press Enter:    ', function (input) {
+    rl.close()
     if (input>4) {
       console.log('Please choose a number from 0 to 4')
     } else {
