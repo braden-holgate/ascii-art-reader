@@ -34,13 +34,13 @@ function mainMenu() {
     input: process.stdin,
     output: process.stdout
   })
-  rl.question('Would you like to see an artwork?  Press y to enter or any other key to exit ', function(input) {
+  rl.question('Would you like to see an artwork?  Press y to enter or q to exit ', function(input) {
     rl.close()
     if (input === 'y') {
       displayList(artList)
       pressEnter()
-    } else {
-      console.log('Goodbye then')
+    } else if (input === 'q') {
+      process.exit(0)
     }
   })
 }
