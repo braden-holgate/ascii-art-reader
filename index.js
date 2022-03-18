@@ -11,8 +11,7 @@ const artList = [' ', '0. kea', '1. kiwi', '2. manaia', '3. nikau', '4. pohutuka
 const fileList = ['kea.txt', 'kiwi.txt', 'manaia.txt', 'nikau.txt', 'pohutukawa.txt']
 
 console.log('Do you like art? You are in the right place! Welcome!')
-displayList(artList)
-pressEnter()
+mainMenu()
 
 function pressEnter () {
   const rl = readline.createInterface({
@@ -25,10 +24,25 @@ function pressEnter () {
       console.log('Please choose a number from 0 to 4')
     } else {
       displayFile(input)
+      
     }
-    pressEnter()
   })
+}
 
+function mainMenu() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+  rl.question('Would you like to see an artwork?  Press y to enter or any other key to exit ', function(input) {
+    rl.close()
+    if (input === 'y') {
+      displayList(artList)
+      pressEnter()
+    } else {
+      console.log('Goodbye then')
+    }
+  })
 }
 
 function displayFile (input) {
@@ -36,7 +50,9 @@ function displayFile (input) {
   fs.readFile(`data/${fileList[input]}`, 'utf8', (err, data) => {
     if (err) {throw err};
     console.log(data);
+    mainMenu()
   })
+  
 }
 
 function displayList(artList) {
