@@ -72,12 +72,14 @@ function pickAnother() {
     output: process.stdout,
   })
   rl.question(
-    'Want to see another?  Press y to enter or q to exit:  ',
+    'Want to see another?  Press y to enter, c to leave a comment ,or q to exit:  ',
     function (input) {
       rl.close()
       if (input === 'y') {
         displayList(artList)
         pressEnter()
+      } else if (input == 'c') {
+        comments()
       } else if (input === 'q') {
         process.exit(0)
       }
@@ -90,14 +92,14 @@ function comments() {
     input: process.stdin,
     output: process.stdout,
   })
-  rl.question('Would you like to leave a comment?:  ', function (input) {
+  rl.question('Leave a comment and press enter:  ', function (input) {
     rl.close()
-    if (input === 'y') {
-      displayList(artList)
-      pressEnter()
-    } else if (input === 'q') {
-      process.exit(0)
-    }
+    fs.writeFile('data/comments.txt', input, 'utf-8', (err) => {
+      if (err) {
+        throw err
+      }
+      pickAnother()
+    })
   })
 }
 
