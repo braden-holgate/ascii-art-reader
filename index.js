@@ -7,25 +7,33 @@
 const readline = require('readline')
 const fs = require('fs')
 const os = require('os')
-const artList = [
-  ' ',
-  '0. kea',
-  '1. kiwi',
-  '2. manaia',
-  '3. nikau',
-  '4. pohutukawa',
-  ' ',
-]
-const fileList = [
-  'kea.txt',
-  'kiwi.txt',
-  'manaia.txt',
-  'nikau.txt',
-  'pohutukawa.txt',
-]
-let regNum = /[0-4]/
-console.log('Do you like art? You are in the right place! Welcome!')
-mainMenu()
+let regNum = /[0-9]/
+const artList = ['']
+const fileList = []
+init()
+
+function init() {
+  fs.readdir('data', ['utf-8', 'false'], (err, files) => {
+    if (err) {
+      throw err
+    }
+    createLists(files)
+    console.log('Do you like art? You are in the right place! Welcome!')
+    mainMenu()
+  })
+}
+
+function createLists(files) {
+  let option = 0
+  for (let each of files) {
+    if (each !== 'comments.txt') {
+      fileList.push(each)
+      artList.push(`${option}. ${each.replace('.txt', '')}`)
+      ++option
+    }
+  }
+  artList.push('')
+}
 
 function pressEnter() {
   const rl = readline.createInterface({
@@ -38,7 +46,7 @@ function pressEnter() {
       rl.close()
       if (input === 'q') {
         process.exit(0)
-      } else if (!regNum.test(input)) {
+      } else if (!regNum.test(input) || input >= artList.length) {
         console.log(`Please choose a number from 0 to 4`)
         pressEnter()
       } else {
