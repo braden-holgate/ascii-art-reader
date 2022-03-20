@@ -33,13 +33,13 @@ function pressEnter() {
     output: process.stdout,
   })
   rl.question(
-    'Pick an artwork by inputting a number between 0 and 4 and press Enter:    ',
+    `Pick an artwork by inputting a number between 0 and 4 and press Enter:    `,
     function (input) {
       rl.close()
       if (input === 'q') {
         process.exit(0)
       } else if (!regNum.test(input)) {
-        console.log('Please choose a number from 0 to 4')
+        console.log(`Please choose a number from 0 to 4`)
         pressEnter()
       } else {
         displayFile(input)
@@ -54,7 +54,7 @@ function mainMenu() {
     output: process.stdout,
   })
   rl.question(
-    'Would you like to see an artwork?  Press y to enter or q to exit:  ',
+    `Would you like to see an artwork?  Press y to enter or q to exit:  `,
     function (input) {
       rl.close()
       if (input === 'y') {
@@ -73,7 +73,7 @@ function pickAnother() {
     output: process.stdout,
   })
   rl.question(
-    'Want to see another?  Press y to enter, c or v to comment or view comments and q to exit:  ',
+    `Want to see another? ${os.EOL} Press y to enter ${os.EOL} Press c or v to comment or view comments ${os.EOL} Press d to erase comments ${os.EOL} Press q to exit:  ${os.EOL}`,
     function (input) {
       rl.close()
       if (input === 'y') {
@@ -83,6 +83,8 @@ function pickAnother() {
         comments()
       } else if (input == 'v') {
         showComments()
+      } else if (input == 'd') {
+        eraseComments()
       } else if (input === 'q') {
         process.exit(0)
       }
@@ -95,24 +97,48 @@ function comments() {
     input: process.stdin,
     output: process.stdout,
   })
-  rl.question('Leave a comment and press enter:  ', function (input) {
+  rl.question(`Leave a comment and press enter:  ${os.EOL}`, function (input) {
     rl.close()
     fs.appendFile('data/comments.txt', os.EOL + input, 'utf-8', (err) => {
       if (err) {
         throw err
       }
-      console.log('Comment submitted')
+      console.log(`Comment submitted`)
       pickAnother()
     })
   })
 }
 
+function eraseComments() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  rl.question(
+    `Are you sure you want to erase all comments?  y to erase, n to return to the main menu:  ${os.EOL}`,
+    function (input) {
+      rl.close()
+      if (input === 'y') {
+        fs.writeFile('data/comments.txt', '', 'utf-8', (err) => {
+          if (err) {
+            throw err
+          }
+          console.log(`Comments erased`)
+          mainMenu()
+        })
+      }
+      if (input === 'n') {
+        mainMenu()
+      }
+    }
+  )
+}
 function showComments() {
   fs.readFile('data/comments.txt', 'utf-8', (err, data) => {
     if (err) {
       throw err
     }
-    console.log(data)
+    console.log(`Comments: ${os.EOL} ${data}`)
     pickAnother()
   })
 }
