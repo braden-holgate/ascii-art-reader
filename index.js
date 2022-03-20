@@ -6,6 +6,7 @@
 // it then reads the file and displays in the terminal.
 const readline = require('readline')
 const fs = require('fs')
+const os = require('os')
 const artList = [
   ' ',
   '0. kea',
@@ -96,10 +97,11 @@ function comments() {
   })
   rl.question('Leave a comment and press enter:  ', function (input) {
     rl.close()
-    fs.writeFile('data/comments.txt', input, 'utf-8', (err) => {
+    fs.appendFile('data/comments.txt', os.EOL + input, 'utf-8', (err) => {
       if (err) {
         throw err
       }
+      console.log('Comment submitted')
       pickAnother()
     })
   })
