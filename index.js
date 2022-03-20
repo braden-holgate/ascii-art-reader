@@ -72,7 +72,7 @@ function pickAnother() {
     output: process.stdout,
   })
   rl.question(
-    'Want to see another?  Press y to enter, c to leave a comment ,or q to exit:  ',
+    'Want to see another?  Press y to enter, c or v to comment or view comments and q to exit:  ',
     function (input) {
       rl.close()
       if (input === 'y') {
@@ -80,6 +80,8 @@ function pickAnother() {
         pressEnter()
       } else if (input == 'c') {
         comments()
+      } else if (input == 'v') {
+        showComments()
       } else if (input === 'q') {
         process.exit(0)
       }
@@ -100,6 +102,16 @@ function comments() {
       }
       pickAnother()
     })
+  })
+}
+
+function showComments() {
+  fs.readFile('data/comments.txt', 'utf-8', (err, data) => {
+    if (err) {
+      throw err
+    }
+    console.log(data)
+    pickAnother()
   })
 }
 
